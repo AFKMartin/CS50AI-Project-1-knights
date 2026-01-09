@@ -26,14 +26,37 @@ knowledge0 = And(
 # A says "We are both knaves."
 # B says nothing.
 knowledge1 = And(
-    # TODO
+    # Each one is either a knight or a knave, not both
+    Or(AKnight, AKnave),
+    Not(And(AKnight, AKnave)),
+    Or(BKnight, BKnave),
+    Not(And(BKnight, BKnave)),
+
+    # If A is a knight then "we are both knaves" is true
+    # If A is a knave then "we are both knaves" is false
+    Implication(AKnight, And(AKnave, BKnave)),
+    Implication(AKnave, Not(And(AKnave, BKnave)))
 )
 
 # Puzzle 2
 # A says "We are the same kind."
 # B says "We are of different kinds."
 knowledge2 = And(
-    # TODO
+    # Each one is either a knight or a knave, not both
+    Or(AKnight, AKnave),
+    Not(And(AKnight, AKnave)),
+    Or(BKnight, BKnave),
+    Not(And(BKnight, BKnave)),
+
+    # If A is a knight, then they are the same 
+    # If A is a knave, then they are NOT the same
+    Implication(AKnight, Or(And(AKnight, BKnight), And(AKnave, BKnave))),
+    Implication(AKnave, Not(Or(And(AKnight, BKnight), And(AKnave, BKnave)))),
+
+    # If B is a knight, then they are different
+    # If B is a knave, then they are NOT different
+    Implication(BKnight, Or(And(AKnight, BKnave), And(AKnave, BKnight))),
+    Implication(BKnave, Not(Or(And(AKnight, BKnave), And(AKnave, BKnight))))   
 )
 
 # Puzzle 3
@@ -42,7 +65,33 @@ knowledge2 = And(
 # B says "C is a knave."
 # C says "A is a knight."
 knowledge3 = And(
-    # TODO
+    # Each one is either a knight or a knave, not both
+    Or(AKnight, AKnave),
+    Not(And(AKnight, AKnave)),
+    Or(BKnight, BKnave),
+    Not(And(BKnight, BKnave)),
+    Or(CKnight, CKnave),
+    Not(And(CKnight, CKnave)),
+
+    # If A is a knight, "I am a knight" is true
+    # If A is a knave, "I am a knight" is false
+    Implication(AKnight, AKnight),  # Always true
+    Implication(AKnave, Not(AKnight)), # Also always true
+
+    # Since A must have said "I am a knight", B must be lying
+    Implication(BKnight, AKnave),
+    Implication(BKnave, AKnight),
+
+    # If B is a knight, then C is a knave
+    # If B is a knave, then C is NOT a knave (C should be a knight)
+    Implication(BKnight, CKnave),
+    Implication(BKnave, Not(CKnave)),
+
+    # If C is a knight, then A is a knight
+    # If C is a knave, then A is NOT a knight (A should be a knave)
+    Implication(CKnight, AKnight),
+    Implication(CKnave, Not(AKnight)),
+
 )
 
 
