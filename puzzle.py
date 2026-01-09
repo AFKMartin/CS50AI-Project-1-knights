@@ -75,22 +75,22 @@ knowledge3 = And(
 
     # If A is a knight, "I am a knight" is true
     # If A is a knave, "I am a knight" is false
-    Implication(AKnight, AKnight),  # Always true
-    Implication(AKnave, Not(AKnight)), # Also always true
+    # Implication(AKnight, AKnight),  # Always true
+    # Implication(AKnave, Not(AKnight)), # Also always true
 
-    # Since A must have said "I am a knight", B must be lying
-    Implication(BKnight, AKnave),
+    # If B is knight, then A is knave (creates contradiction - forces B to be knave)
+    Implication(BKnight, And(AKnight, AKnave)),
     Implication(BKnave, AKnight),
 
     # If B is a knight, then C is a knave
     # If B is a knave, then C is NOT a knave (C should be a knight)
     Implication(BKnight, CKnave),
-    Implication(BKnave, Not(CKnave)),
+    Implication(BKnave, CKnight),
 
     # If C is a knight, then A is a knight
     # If C is a knave, then A is NOT a knight (A should be a knave)
     Implication(CKnight, AKnight),
-    Implication(CKnave, Not(AKnight)),
+    Implication(CKnave, AKnave),
 
 )
 
